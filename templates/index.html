@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Brick Puzzle
+    </title>
+
+    <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+
+    <script src="/lib/jquery/jquery-3.3.1.min.js"></script>
+    <script src="/lib/popper/popper.min.js"></script>
+    <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</head>
+
+<body>
+    <div class="text-center">
+        <h1>Brize Puzzle</h1>
+        <h5>Enter the puzzle dimensions (x,y)</h5>
+        <!-- <form> -->
+        <span id="error-message" class="d-none alert-danger">Invalid Dimensions. Try again!</br></span>
+        Dimensions: <input id="dimensions" type="text" name="dimensions"><br>
+        <!-- Start date (yyyy-mm-dd): <input type="text" name="start_date"><br><br> -->
+        <button onclick="buildPuzzle()">Build Puzzle</button>
+        
+        <div id="puzzle-board">
+
+        </div>
+        <div id="puzzle-solve" class="d-none">
+            <button onclick="solvePuzzle()">Solve Puzzle</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+        
+    </script>
+</body>
+
+</html>

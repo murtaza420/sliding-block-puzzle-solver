@@ -1,0 +1,36 @@
+body {
+    padding: 5px;
+    margin: auto;
+}
+
+button {
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.grid-container {
+    text-align: center;
+    width: 60%;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    padding: 5px;
+}
+
+.puzzle-row {
+    display: inline;
+}
+
+.puzzle-item {
+    height: 40px;
+    width: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    text-align: center;
+}
+
+.puzzle-item::-webkit-outer-spin-button,
+.puzzle-item::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; 
+}
