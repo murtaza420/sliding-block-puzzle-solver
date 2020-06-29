@@ -35,6 +35,11 @@ button {
     margin: 0; 
 }
 
+ul {
+    list-style: none;
+    padding-left: initial;
+}
+
 .red {
     background-color: red;
 }
@@ -53,4 +58,9 @@ button {
 
 .grey {
     background-color: grey;
+}
+
+.error-message {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

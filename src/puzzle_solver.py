@@ -75,10 +75,8 @@ class BrickPuzzle:
         output = ""
         for i in range(len(game_state)):
             for j in range(len(game_state[i])):
-                # print(game_state[i][j],end=',')
                 output += str(game_state[i][j]) + ','
             output += "\n"
-            # print()
         return output
 
     def solve(self):
@@ -252,7 +250,6 @@ class BrickPuzzle:
                 if(game_state[i][j] != move[0] and new_state[i][j] == 0):
                     new_state[i][j] = game_state[i][j]
 
-        #updateBlankPositions(new_state)
         return new_state
 
     # Updates the blank positions after a applying a move
@@ -294,7 +291,6 @@ class BrickPuzzle:
                         normalised_mapping.update({game_state[i][j]:k})
                         k += 1
                     game_state[i][j] = normalised_mapping[game_state[i][j]]
-                    #print(j)
         self.updateBlockDetails(game_state)
         self.updateBlockDimensions()
         self.updateBlankPositions(game_state)
@@ -302,18 +298,15 @@ class BrickPuzzle:
         return game_state
 
     def dfs(self):
-        # global dfs_puzzle_solved
         # List of moves corresponding to the states
         dfs_moves = []
         # Initialise the stack with root state
         dfs_stack = self.dfs_queue.copy()
         n = 0
-        # global self.output
         while(True):
             # Doesn't pop move for the root state
             if(len(dfs_moves) > 0):
                 move_taken = dfs_moves.pop()
-                # print(str(move_taken))
                 self.dfsOutput += str(move_taken) + "\n"
             # Pops out the state on top of the stack (Last entered state)
             game_state = dfs_stack.pop()
@@ -340,7 +333,6 @@ class BrickPuzzle:
                     # If puzzle solved i.e. search complete, breaks the loop
                     if(self.isPuzzleSolved(new_state)):
                         self.dfs_puzzle_solved = True
-                        # print(str(move))
                         self.dfsOutput += str(move) + "\n"
                         self.dfsOutput += self.printGameState(new_state)
                         break
@@ -363,7 +355,6 @@ class BrickPuzzle:
         while(idfs_stack):
             if(len(idfs_moves) > 0):
                 move_taken = idfs_moves.pop()
-                # print(str(move_taken))
                 output1 += str(move_taken) + "\n"
             # Pop out the top element of the stack
             game_state = idfs_stack.pop()
@@ -386,7 +377,6 @@ class BrickPuzzle:
                     idfs_depth.append(current_depth + 1)
                     if(self.isPuzzleSolved(new_state)):
                         self.idfs_puzzle_solved = True
-                        # print(str(move))
                         self.idfsOutput += output1
                         self.idfsOutput += str(move) + "\n"
                         self.idfsOutput += self.printGameState(new_state)
@@ -396,7 +386,6 @@ class BrickPuzzle:
         return len(self.idfs_queue) - len(idfs_stack)
 
     def bfs(self, i):
-        # global output
         puzzle_flag = False
         nodes = 1
         while(not puzzle_flag):
@@ -415,9 +404,7 @@ class BrickPuzzle:
                 new_state = self.normalizeState(new_state)
                 if(not new_state in self.bfs_queue):
                     self.bfs_queue.append(new_state)
-                    # print(str(move))
                     self.bfsOutput += str(move) + "\n"
-                    #printGameState(new_state)
                     if(self.isPuzzleSolved(new_state)):
                         self.bfsOutput += self.printGameState(new_state)
                         puzzle_flag = True

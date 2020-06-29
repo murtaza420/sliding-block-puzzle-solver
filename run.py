@@ -6,6 +6,7 @@ from src.puzzle_solver import BrickPuzzle
 
 app = Flask(__name__, static_folder='public', static_url_path='')
 
+# API Call
 @app.route('/solve_puzzle', methods=['GET', 'POST'])
 def solve_puzzle():
     if request.method == 'POST':
@@ -27,19 +28,13 @@ def solve_puzzle():
         resp = jsonify(output)
         resp.status_code = 200
         return resp
-        # return render_template('results.html', bfs=bfsOutput, dfs=dfsOutput, idfs=idfsOutput)
     return render_template('index.html')
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-def validDimensions(dimensions):
-    dim = dimensions.split(',')
-    if(len(dim) != 2):
-        return False
-    return True
-
+# Formats output from string to a JSON object
 def formatOutput(output):
     moves = []
     time = 0
