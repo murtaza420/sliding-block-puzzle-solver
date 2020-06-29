@@ -42,6 +42,27 @@ const solvePuzzle = async () => {
         body[items[i].getAttribute('id')] = items[i].value
     }
 
+    body['1'] = 1
+    body['2'] = -1
+    body['3'] = -1
+    body['4'] = 1
+    body['5'] = 1
+    body['6'] = 1
+    body['7'] = 0
+    body['8'] = 3
+    body['9'] = 4
+    body['10'] = 1
+    body['11'] = 1
+    body['12'] = 0
+    body['13'] = 2
+    body['14'] = 2
+    body['15'] = 1
+    body['16'] = 1
+    body['17'] = 1
+    body['18'] = 1
+    body['19'] = 1
+    body['20'] = 1
+
     try {
         await fetch('/solve_puzzle', {
 

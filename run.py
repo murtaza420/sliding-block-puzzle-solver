@@ -1,6 +1,11 @@
 from flask import Flask, render_template, send_file, g, request, jsonify, session, escape, redirect
 from passlib.hash import pbkdf2_sha256
-import os, json
+import sys, os, json
+
+# puzzle_solver_path = "./src/puzzle_solver"
+# sys.path.append(os.path.abspath(puzzle_solver_path))
+from src.puzzle_solver import BrickPuzzle
+
 
 app = Flask(__name__, static_folder='public', static_url_path='')
 
@@ -9,15 +14,12 @@ def solve_puzzle():
     print('HEEELEOOO')
     if request.method == 'POST':
         data = request.get_json()
-        print(data['dimensions'])
-        # dimensions = request.form['dimensions']
-        # # print(dimensions)
-        # if(not validDimensions(dimensions)):
-        #     return render_template('index.html', error="Invalid Dimensions")
+    
+        puzzle = BrickPuzzle()
+        puzzle.setInitialState(data)
+        output = puzzle.solve()
 
-        # [x, y] = dimensions.split(',')
-        # print(x)
-        # print(y)
+    print(output)
 
     return render_template('index.html')
 
