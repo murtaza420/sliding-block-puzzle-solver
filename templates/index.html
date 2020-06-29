@@ -17,23 +17,46 @@
 
 <body>
     <div class="text-center">
-        <h1>Brize Puzzle</h1>
-        <h5>Enter the puzzle dimensions (x,y)</h5>
-        <!-- <form> -->
-        <span id="error-message" class="d-none alert-danger">Invalid Dimensions. Try again!</br></span>
-        Dimensions: <input id="dimensions" type="text" name="dimensions"><br>
-        <!-- Start date (yyyy-mm-dd): <input type="text" name="start_date"><br><br> -->
-        <button onclick="buildPuzzle()">Build Puzzle</button>
-        
-        <div id="puzzle-board">
+        <div class="row">
+            <div class="col-12">
+                <h1>Brick Puzzle</h1>
+                <h5>Enter the puzzle dimensions (x,y)</h5>
 
+                <span id="error-message" class="d-none alert-danger">Invalid Dimensions. Try again!</br></span>
+                Dimensions: <input id="dimensions" type="text" name="dimensions"><br>
+
+                <button onclick="buildPuzzle()">Build Puzzle</button>
+
+                <div id="puzzle-board"></div>
+
+                <div id="puzzle-solve" class="d-none">
+                    <button onclick="solvePuzzle()">Solve Puzzle</button>
+                </div>
+            </div>
         </div>
-        <div id="puzzle-solve" class="d-none">
-            <button onclick="solvePuzzle()">Solve Puzzle</button>
+        <div id="results" class="row d-none">
+            <div class="col-4">
+                <h3>BFS</h3>
+                <span id="bfs-time"></span><br>
+                <div id="bfs-final-state"></div>
+                <ol id="bfs-moves"></ol>
+            </div>
+            <div class="col-4">
+                <h3>DFS</h3>
+                <span id="dfs-time"></span><br>
+                <div id="dfs-final-state"></div>
+                <ol id="dfs-moves"></ol>
+            </div>
+            <div class="col-4">
+                <h3>IDFS</h3>
+                <span id="idfs-time"></span><br>
+                <div id="idfs-final-state"></div>
+                <ol id="idfs-moves"></ol>
+            </div>
         </div>
     </div>
     <script type="text/javascript">
-        
+
     </script>
 </body>
 

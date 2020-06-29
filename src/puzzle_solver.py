@@ -31,16 +31,9 @@ class BrickPuzzle:
         self.dfs_puzzle_solved = False
         self.idfs_puzzle_solved = False
         self.dfs_counter = 0
-        self.output = ""
-
-    def clearCollections(self):
-        self.game_states.clear()
-        self.blanks_positions.clear()
-        self.goal_positions.clear()
-        self.block_details.clear()
-        self.bfs_queue.clear()
-        self.dfs_queue.clear()
-        self.idfs_queue.clear()
+        self.bfsOutput = ""
+        self.dfsOutput = ""
+        self.idfsOutput = ""
 
     def setInitialState(self, data):
         
@@ -79,47 +72,39 @@ class BrickPuzzle:
         self.idfs_queue.append(self.initial_game_state.copy())
 
     def printGameState(self, game_state):
+        output = ""
         for i in range(len(game_state)):
             for j in range(len(game_state[i])):
-                print(game_state[i][j],end=',')
-                self.output += str(game_state[i][j]) + ','
-            self.output += "\n"
-            print()
-
-    # def printAllGameStates(self):
-    #     for i in range(len(self.game_states)):
-    #         for j in range(len(self.game_states[i])):
-    #             for k in range(len(self.game_states[i][j])):
-    #                 print(self.game_states[i][j][k],end=',')
-    #             print()
+                # print(game_state[i][j],end=',')
+                output += str(game_state[i][j]) + ','
+            output += "\n"
+            # print()
+        return output
 
     def solve(self):
-        # print('---------------Random Walk----------------')
-        # self.startRandomWalk(self.game_states[0],3)
-        print('---------------BFS----------------')
+        # BFS
         t1 = time.perf_counter()
         nodes = self.bfs(0)
         t2 = time.perf_counter()
-        # print(str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n")
-        self.output += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n"
-        print('---------------DFS----------------')
+        self.bfsOutput += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n"
+        
+        # DFS
         t1 = time.perf_counter()
         nodes = self.dfs()
         t2 = time.perf_counter()
-        self.output += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n"
-        # print(str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n")
+        self.dfsOutput += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n"
+        
+        # IDFS
         idfs_counter = 1
-        print('---------------IDFS----------------')
         t1 = time.perf_counter()
         # Keep incrementing depth value till puzzle is solved
         while(not self.idfs_puzzle_solved):
             nodes = self.idfs(idfs_counter)
             idfs_counter += 1
         t2 = time.perf_counter()
-        self.output += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1)
-        # print(str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1))
-        # writeOutput(puzzle.output)
-        return self.output
+        self.idfsOutput += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1)
+        
+        return [self.bfsOutput, self.dfsOutput, self.idfsOutput]
 
     def isPuzzleSolved(self, game_state):
         print
@@ -186,7 +171,6 @@ class BrickPuzzle:
                         block_move_flag = True
                 else:
                     self.possible_moves.append((game_state[i][j-1],'right'))
-    
 
     def checkGoalMove(self, game_state):
         block_move_flag = True
@@ -242,43 +226,6 @@ class BrickPuzzle:
                         block_move_flag = True
                 else:
                     self.possible_moves.append((game_state[i][j-1],'right'))
-
-
-    def getPossibleMoves(self):
-        for i in self.possible_moves:
-            print(i)
-
-    def generatePossibleMovesUnion(self, game_state):
-        self.possible_moves_union.clear()
-        self.union_move_visited.clear()
-        # For a given state, all the consecutive moves of a block are checked 
-        for i in self.block_details.copy():
-            self.possible_moves_union.update({i:[]})
-            # Add the visited states
-            self.union_move_visited.update({i:[game_state]})
-            self.getNextMove(game_state,i,1)
-
-    def getNextMove(self, game_state,block,k):
-        self.updateBlockDetails(game_state)
-        self.updateBlockDimensions()
-        self.updateBlankPositions(game_state)
-        self.generatePossibleMoves(game_state)
-        for i in self.possible_moves.copy():
-            if i[0] == block:
-                self.updateBlockDetails(game_state)
-                self.updateBlockDimensions()
-                self.updateBlankPositions(game_state)
-                new_state = self.applyMove(game_state,i)
-                # if state not visited, adds the state
-                if not new_state in self.union_move_visited[block]:
-                    self.possible_moves_union[i[0]].append(i)
-                    self.union_move_visited[i[0]].append(new_state)
-                    # Checks the move for the next state of the same block
-                    self.getNextMove(new_state,block,k+1)
-
-    def getBlankPositions(self):
-        for i in self.blanks_positions:
-            print(str(i[0])+","+str(i[1]))
 
     def applyMove(self, game_state,move):
         # Creates a blank state
@@ -351,27 +298,8 @@ class BrickPuzzle:
         self.updateBlockDetails(game_state)
         self.updateBlockDimensions()
         self.updateBlankPositions(game_state)
-        #for i in self.block_details:
-        #    print(str(i) +" : "+str(self.block_details[i].block_dimension))
 
-        return game_state              
-
-    # def startRandomWalk(self, game_state,n):
-    #     # global output
-    #     self.printGameState(game_state)
-    #     # Iterates till n moves are over or puzzle is solved
-    #     while(n > 0 and not self.isPuzzleSolved(self.game_states[-1])):
-    #         # Generates all moves 
-    #         self.generatePossibleMoves(self.game_states[-1])
-    #         rand = random.randint(0,len(self.possible_moves)-1)
-    #         print(str(self.possible_moves[rand]))
-    #         self.output += str(self.possible_moves[rand]) + "\n"
-    #         # Executes a random move
-    #         new_state = self.applyMove(self.game_states[-1],self.possible_moves[rand])
-    #         new_state = self.normalizeState(new_state)
-    #         self.game_states.append(new_state)
-    #         self.printGameState(self.game_states[-1])
-    #         n -= 1
+        return game_state
 
     def dfs(self):
         # global dfs_puzzle_solved
@@ -385,8 +313,8 @@ class BrickPuzzle:
             # Doesn't pop move for the root state
             if(len(dfs_moves) > 0):
                 move_taken = dfs_moves.pop()
-                print(str(move_taken))
-                self.output += str(move_taken) + "\n"
+                # print(str(move_taken))
+                self.dfsOutput += str(move_taken) + "\n"
             # Pops out the state on top of the stack (Last entered state)
             game_state = dfs_stack.pop()
             # Updates blank positions and blocks details for move generation
@@ -412,9 +340,9 @@ class BrickPuzzle:
                     # If puzzle solved i.e. search complete, breaks the loop
                     if(self.isPuzzleSolved(new_state)):
                         self.dfs_puzzle_solved = True
-                        print(str(move))
-                        self.output += str(move) + "\n"
-                        self.printGameState(new_state)
+                        # print(str(move))
+                        self.dfsOutput += str(move) + "\n"
+                        self.dfsOutput += self.printGameState(new_state)
                         break
             if self.dfs_puzzle_solved:
                 break
@@ -435,7 +363,7 @@ class BrickPuzzle:
         while(idfs_stack):
             if(len(idfs_moves) > 0):
                 move_taken = idfs_moves.pop()
-                print(str(move_taken))
+                # print(str(move_taken))
                 output1 += str(move_taken) + "\n"
             # Pop out the top element of the stack
             game_state = idfs_stack.pop()
@@ -458,10 +386,10 @@ class BrickPuzzle:
                     idfs_depth.append(current_depth + 1)
                     if(self.isPuzzleSolved(new_state)):
                         self.idfs_puzzle_solved = True
-                        print(str(move))
-                        self.output += output1
-                        self.output += str(move) + "\n"
-                        self.printGameState(new_state)
+                        # print(str(move))
+                        self.idfsOutput += output1
+                        self.idfsOutput += str(move) + "\n"
+                        self.idfsOutput += self.printGameState(new_state)
                         break
             if self.idfs_puzzle_solved:
                 break
@@ -487,60 +415,19 @@ class BrickPuzzle:
                 new_state = self.normalizeState(new_state)
                 if(not new_state in self.bfs_queue):
                     self.bfs_queue.append(new_state)
-                    print(str(move))
-                    self.output += str(move) + "\n"
+                    # print(str(move))
+                    self.bfsOutput += str(move) + "\n"
                     #printGameState(new_state)
                     if(self.isPuzzleSolved(new_state)):
-                        self.printGameState(new_state)
+                        self.bfsOutput += self.printGameState(new_state)
                         puzzle_flag = True
                         break
             # Increment i to take next element from the queue
             i += 1
         return len(self.bfs_queue)
 
-    def printBlockDetails(self):
-        for i in self.block_details:
-            print(str(i) + " : " + str(self.block_details[i].block_position_list))
-
 class BlockDetails:
     def __init__(self,count,dimen,pos):
         self.block_count = count
         self.block_dimension = dimen
         self.block_position_list = pos
-            
-
-# def main():
-    
-#     puzzle.startRandomWalk(puzzle.game_states[0],3)
-#     puzzle.clearCollections()
-    
-#     t1 = time.perf_counter()
-#     nodes = puzzle.bfs(0)
-#     t2 = time.perf_counter()
-#     print(str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n")
-#     puzzle.output += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n"
-#     t1 = time.perf_counter()
-#     nodes = puzzle.dfs()
-#     t2 = time.perf_counter()
-#     puzzle.output += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n"
-#     print(str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1) +"\n")
-#     idfs_counter = 1
-#     t1 = time.perf_counter()
-#     # Keep incrementing depth value till puzzle is solved
-#     while(not puzzle.idfs_puzzle_solved):
-#         nodes = puzzle.idfs(idfs_counter)
-#         idfs_counter += 1
-#     t2 = time.perf_counter()
-#     puzzle.output += str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1)
-#     print(str(nodes) + " " + str(round(t2-t1,2)) + " " + str(nodes - 1))
-#     writeOutput(puzzle.output)
-    
-
-# def writeOutput(output):
-#     output_file = open("output-hw1.txt",'w')
-#     output_file.write(output)
-#     output_file.flush()
-#     output_file.close()
-
-# if __name__ == "__main__":
-#     main()
